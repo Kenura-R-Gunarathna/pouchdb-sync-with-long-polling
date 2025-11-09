@@ -20,7 +20,20 @@ npm install
 
 ### 2. Start Server (Terminal 1)
 ```bash
-npm run server
+pnpm start:server
+```
+
+### 3. Start clients
+
+```bash
+cd html-front-client-1
+pnpx serve --listen 2001 --cors
+
+cd html-front-client-2
+pnpx serve --listen 2002 --cors
+
+html-front-client-3
+pnpx serve --listen 2003 --cors
 ```
 
 You should see:
