@@ -1,0 +1,19 @@
+meta {
+  name: selected-doc
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{SERVER_URL}}/api/docs/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 61de578b-4dec-46c4-8eb6-c3529fed498a
+}
+
+settings {
+  encodeUrl: true
+}

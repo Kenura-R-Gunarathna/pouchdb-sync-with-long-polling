@@ -1,0 +1,27 @@
+meta {
+  name: update-doc
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{SERVER_URL}}/api/docs/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 9b264ca5-f8a8-4a17-bb50-684e2ae1cf1a
+}
+
+body:json {
+  {
+    "name":"name 3",
+    "content":"content 3",
+    "author":"author 3"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

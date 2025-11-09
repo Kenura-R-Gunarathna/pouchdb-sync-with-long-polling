@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User 3 | PouchDB Client App</title>
+  <script src="pouchdb.min.js"></script>
+  <script defer src="app.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 30px;
+      background: #f8f9fa;
+    }
+    h1 { color: #2c3e50; }
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { background: #2980b9; }
+    pre {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 10px;
+      max-height: 400px;
+      overflow: auto;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>PouchDB Sync + CRUD Demo + User 3</h1>
+
+  <div>
+    <button id="btnCreate">Create Doc</button>
+    <button id="btnReadAll">Get All Docs</button>
+    <button id="btnReadOne">Get One</button>
+    <button id="btnUpdate">Update</button>
+    <button id="btnDelete">Delete</button>
+  </div>
+
+  <h3>Console Output:</h3>
+  <pre id="output"></pre>
+</body>
+</html>

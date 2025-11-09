@@ -1,0 +1,19 @@
+meta {
+  name: delete-doc
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{SERVER_URL}}/api/docs/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}
+
+settings {
+  encodeUrl: true
+}
