@@ -1,30 +1,48 @@
-// html-front-client-1\app.js
+// html-front-client-1\app_v2.js
 
 // --- CONFIG ---
-const SYNC_URL = 'http://localhost:3001/db/mydb';
+// UPDATE to the single server port
+const SERVER_URL = 'http://localhost:3000';
+const SYNC_URL = `${SERVER_URL}/db/mydb`;
 const DB_NAME = '../client-1-data';
 
 const output = document.getElementById('output');
 const log = (...args) => {
   console.log(...args);
-  output.textContent += args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : a).join(' ') + '\n';
+  const text = args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : a).join(' ');
+  output.textContent = text + '\n' + output.textContent; // Prepend new logs
 };
+
+// --- Socket.IO Client ---
+log('Attempting to connect to Socket.IO server...');
+const socket = io(SERVER_URL);
+
+socket.on('connect', () => {
+  log('✅ Connected to Socket.IO server!');
+});
+
+socket.on('database_change', (change) => {
+  // This is a PUSH notification from the server, independent of PouchDB sync.
+  // Useful for triggering real-time UI events that don't need the full doc.
+  log('SOCKET.IO MSG: A change happened!', change.id);
+});
+
+socket.on('connect_error', (err) => {
+  log('❌ Socket.IO connection error:', err.message);
+});
 
 // --- Local DB ---
 const db = new PouchDB(DB_NAME);
 
-// --- Sync ---
+// --- PouchDB Sync ---
 const remoteDB = new PouchDB(SYNC_URL);
 db.sync(remoteDB, { live: true, retry: true })
-  .on('change', info => log('🔄 Data changed:', info))
-  .on('paused', info => log('⏸️ Sync paused:', info))
-  .on('active', () => log('▶️ Sync active'))
-  .on('error', err => log('❌ Sync error:', err));
+  .on('change', info => log('POUCHDB SYNC: Data changed:', info.direction, info.change.docs.length, 'docs'))
+  .on('paused', () => log('POUCHDB SYNC: Paused'))
+  .on('active', () => log('POUCHDB SYNC: Active'))
+  .on('error', err => log('❌ POUCHDB SYNC error:', err));
 
-db.replicate.from(remoteDB).on('complete', info => log('Initial pull complete', info))
-  .on('error', err => log('Replication error', err));
-
-// --- CRUD using local PouchDB ---
+// --- CRUD functions (same as before) ---
 async function getAllDocs() {
   const res = await db.allDocs({ include_docs: true });
   const docs = res.rows.map(r => r.doc);
@@ -69,7 +87,7 @@ async function deleteDoc(id) {
   }
 }
 
-// --- Example buttons ---
+// --- Example buttons (same as before) ---
 let lastCreatedId = null;
 
 document.getElementById('btnCreate').onclick = async () => {

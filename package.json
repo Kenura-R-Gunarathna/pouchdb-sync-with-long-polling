@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start:server": "node server.js",
+    "start:server_v2": "node server_v2.js",
     "start:client_1": "node client-1.js",
     "start:client_2": "node client-2.js",
     "start:client_3": "node client-3.js",
@@ -26,6 +27,7 @@
     "express-pouchdb": "^4.2.0",
     "hono": "^4.4.6",
     "node-fetch": "^2.7.0",
-    "pouchdb": "^8.0.1"
+    "pouchdb": "^8.0.1",
+    "socket.io": "^4.7.5"
   }
 }
