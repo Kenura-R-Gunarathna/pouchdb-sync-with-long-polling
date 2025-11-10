@@ -23,7 +23,8 @@ First, let's organize the project files for a TypeScript environment.
 │   └── server.ts
 │
 ├── package.json
-└── tsconfig.json```
+└── tsconfig.json
+```
 
 ### 1. Setup and Configuration
 
