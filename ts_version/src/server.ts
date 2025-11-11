@@ -4,16 +4,46 @@ import http from 'http';
 import express from 'express';
 import cors from 'cors';
 import PouchDB from 'pouchdb';
+import PouchDBFind from 'pouchdb-find';
 import expressPouchDB from 'express-pouchdb';
 import { Server } from 'socket.io';
-import { createRouter } from './routes/genericRouter';
+
+import { createUserRouter } from './routes/userRouter';
+import { createTeacherRouter } from './routes/teacherRouter';
+import { createStudentRouter } from './routes/studentRouter';
+import { createClassRouter } from './routes/classRouter';
+import { createAuthRouter } from './routes/auth';
+import { authMiddleware } from './middleware/authMiddleware';
+
+// Change this to 'couchdb' when you deploy against a real CouchDB
+const DATABASE_STRATEGY: 'leveldb' | 'couchdb' = 'leveldb'; 
 
 const PORT = 3000;
 const SERVER_URL = `http://localhost:${PORT}`;
 
 // --- 1. Create the Express App and Database ---
 const app = express();
-const db = new PouchDB('./server-data');
+
+// --- NEW: Add the find plugin to PouchDB ---
+PouchDB.plugin(PouchDBFind);
+
+// Choose DB connection based on the strategy
+// @ts-ignore
+const db = DATABASE_STRATEGY === 'couchdb'
+    ? new PouchDB('http://user:pass@localhost:5984/your-remote-db') // Example for CouchDB
+    : new PouchDB('./server-data'); // Local LevelDB
+
+
+// --- NEW: Create an index for efficient querying ---
+// This code runs once on server startup to ensure the index exists.
+db.createIndex({
+    index: { fields: ['type'] }
+}).then(() => {
+    console.log('✅ Database index on "type" field is ready.');
+}).catch(err => {
+    console.error('❌ Error creating database index:', err);
+});
+
 
 // --- 2. Define CORS Policy ---
 const allowedOrigins = ['http://localhost:2001', 'http://localhost:2002', 'http://localhost:2003'];
@@ -33,14 +63,13 @@ const corsOptions: cors.CorsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// --- 4. Mount PouchDB Sync Endpoint ---
-app.use('/db', expressPouchDB(PouchDB, { mode: 'minimumForPouchDB' }));
-
-// --- 5. Mount the REST API Routers ---
-app.use('/api/users', createRouter(db, 'user'));
-app.use('/api/teachers', createRouter(db, 'teacher'));
-app.use('/api/students', createRouter(db, 'student'));
-app.use('/api/classes', createRouter(db, 'class'));
+// --- Mount Authentication Router (Public) ---
+app.use('/api/auth', createAuthRouter(db)); // // This route does NOT have the authMiddleware because the user isn't logged in yet.
+app.use('/db', authMiddleware, expressPouchDB(PouchDB, { mode: 'minimumForPouchDB' })); // Every request to the sync endpoint must now be authenticated.
+app.use('/api/users', authMiddleware, createUserRouter(db));
+app.use('/api/teachers', authMiddleware, createTeacherRouter(db));
+app.use('/api/students', authMiddleware, createStudentRouter(db));
+app.use('/api/classes', authMiddleware, createClassRouter(db));
 
 // --- 6. Create HTTP Server and Socket.IO ---
 const server = http.createServer(app);

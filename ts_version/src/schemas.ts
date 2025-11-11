@@ -6,6 +6,11 @@ export interface PouchDBDocument {
     _rev?: string;
 }
 
+export interface ExistingPouchDBDocument {
+    _id: string;
+    _rev: string;
+}
+
 // We add a 'type' field to distinguish between our different schemas
 export interface TypedDocument extends PouchDBDocument {
     type: 'user' | 'teacher' | 'student' | 'class';
@@ -17,6 +22,7 @@ export interface User extends TypedDocument {
     type: 'user';
     username: string;
     password?: string; // Password should ideally be hashed and not sent to client
+    role: 'student' | 'teacher' | 'admin';
 }
 
 export interface Teacher extends TypedDocument {
@@ -43,3 +49,10 @@ export interface Class extends TypedDocument {
 
 // A union type for any possible document in our DB
 export type AnyDocument = User | Teacher | Student | Class;
+
+// A utility type that converts a document type to its "existing" version,
+// making the PouchDB fields non-optional.
+export type Existing<T extends PouchDBDocument> = T & ExistingPouchDBDocument;
+
+// A union type for any document that has been fetched from the database.
+export type AnyExistingDocument = Existing<User> | Existing<Teacher> | Existing<Student> | Existing<Class>;
