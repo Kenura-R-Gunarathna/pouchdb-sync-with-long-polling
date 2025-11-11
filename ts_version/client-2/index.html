@@ -1,0 +1,30 @@
+<!-- client-2\index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User 2 | PouchDB Client App</title>
+  <script src="socket.io.min.js"></script>
+  <script src="pouchdb.min.js"></script>
+  <script defer src="app.js"></script>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    button { margin: 5px; padding: 10px; cursor: pointer; }
+    pre { background: #eee; padding: 10px; max-height: 400px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <h1>PouchDB Multi-Schema Demo - User 2</h1>
+
+  <div>
+    <button id="btnCreateStudent">Create Student</button>
+    <button id="btnCreateTeacher">Create Teacher</button>
+    <button id="btnReadAll">Get All Docs (from local DB)</button>
+    <button id="btnDeleteLast">Delete Last Created</button>
+  </div>
+
+  <h3>Console Output:</h3>
+  <pre id="output"></pre>
+</body>
+</html>

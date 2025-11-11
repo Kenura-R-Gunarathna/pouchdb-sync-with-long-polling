@@ -1,6 +1,6 @@
 // --- CONFIG ---
 const SYNC_URL = 'http://localhost:3001/db/mydb';
-const DB_NAME = '../client-3-data';
+const DB_NAME = './client-data';
 
 const output = document.getElementById('output');
 const log = (...args) => {

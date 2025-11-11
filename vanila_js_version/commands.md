@@ -1,7 +1,7 @@
 ## Commands TO test app
 
 ```bash
-pnpm start:server
+pnpm start:server_v2
 ```
 
 ```bash

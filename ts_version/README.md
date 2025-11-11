@@ -443,23 +443,23 @@ document.getElementById('btnDeleteLast').onclick = async () => {
 
 1.  **Install Dependencies:**
     ```bash
-    npm install
+    pnpm install
     ```
 2.  **Build the TypeScript Server:**
     ```bash
-    npm run build
+    pnpm build
     ```
     This compiles everything from `/src` into JavaScript in the `/dist` directory.
 3.  **Run the Server:**
     You can use the development server which automatically restarts on changes:
     ```bash
-    npm run dev
+    pnpm dev
     ```
     Or run the compiled production code:
     ```bash
-    npm start
+    pnpm start
     ```
 4.  **Open the Client:**
-    Open the `html-front-client-1/index.html` file in your web browser.
+    Open the `client-1/index.html` file in your web browser.
 
 Now, when you click "Create Student" or "Create Teacher," the client will create a typed document in its local PouchDB, which will then sync to the server. The server's typed router will correctly handle the incoming data.

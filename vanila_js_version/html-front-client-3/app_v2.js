@@ -4,7 +4,7 @@
 // UPDATE to the single server port
 const SERVER_URL = 'http://localhost:3000';
 const SYNC_URL = `${SERVER_URL}/db/mydb`;
-const DB_NAME = '../client-2-data';
+const DB_NAME = './client-data';
 
 const output = document.getElementById('output');
 const log = (...args) => {
